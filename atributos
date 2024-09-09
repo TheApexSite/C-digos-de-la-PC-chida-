@@ -1,0 +1,23 @@
+class Carta:
+    def __init__(self, nombre, vida, daño, alcance):
+        self.nombre = nombre
+        self.vida = vida
+        self.daño = daño
+        self.alcance = alcance
+    
+    def mostrar_atributos(self):
+        print(f"Nombre: {self.nombre}")
+        print(f"Vida: {self.vida}")
+        print(f"Daño: {self.daño}")
+        print(f"Alcance: {self.alcance}")
+        print()
+
+# Atributos personajes
+personaje1 = Carta("Mago Eléctrico", 800, 100, 5)
+personaje2 = Carta("Gigante Noble", 3700, 600, 5)
+personaje3 = Carta("Montapuercos", 1500, 300, 2)
+
+# Imprimir atributos de cada personaje
+personaje1.mostrar_atributos()
+personaje2.mostrar_atributos()
+personaje3.mostrar_atributos()

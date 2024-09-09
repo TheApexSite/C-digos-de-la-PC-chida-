@@ -1,0 +1,129 @@
+import os  # Necesario para limpiar la consola en Windows
+
+class Personaje:
+    def __init__(self, nombre, poder):
+        self.nombre = nombre
+        self.poder = poder
+        self.atributos = []
+
+    def presentarse(self):
+        print(f"\nSoy {self.nombre} y tengo el poder de {self.poder}")
+
+    def heredar_atributos(self, otro_personaje):
+        atributos_nuevos = otro_personaje.atributos.copy()
+        self.atributos.extend(atributos_nuevos)
+        return atributos_nuevos
+
+    def atacar(self):
+        print(f"{self.nombre} realiza un ataque genérico")
+
+
+class AtaqueConPuerco:
+    def __init__(self):
+        self.atributos = ["salto"]
+
+    def atacar_con_puerco(self):
+        print("Ataco montado en un puerco, causando daño rápido")
+
+
+class Montapuercos(Personaje, AtaqueConPuerco):
+    def __init__(self, nombre, poder):
+        Personaje.__init__(self, nombre, poder)
+        AtaqueConPuerco.__init__(self)
+        self.atributos.append("salto")
+
+    def atacar(self):
+        self.atacar_con_puerco()
+
+
+class AtaqueElectrico:
+    def __init__(self):
+        self.atributos = ["zap!"]
+
+    def atacar_con_rayos(self):
+        print("Le doy toques a los enemigos xd")
+
+
+class MagoElectrico(Personaje, AtaqueElectrico):
+    def __init__(self, nombre, poder):
+        Personaje.__init__(self, nombre, poder)
+        AtaqueElectrico.__init__(self)
+        self.atributos.append("zap!")
+
+    def atacar(self):
+        self.atacar_con_rayos()
+
+
+class AtaqueConCañon:
+    def __init__(self):
+        self.atributos = ["bola de cañón"]
+
+    def atacar_con_cañon(self):
+        print("Lanzo un cañonazo a los enemigos")
+
+
+class GiganteNoble(Personaje, AtaqueConCañon):
+    def __init__(self, nombre, poder):
+        Personaje.__init__(self, nombre, poder)
+        AtaqueConCañon.__init__(self)
+        self.atributos.append("bola de cañón")
+
+    def atacar(self):
+        self.atacar_con_cañon()
+
+
+# Crear instancias de los personajes
+montapuercos = Montapuercos("Montapuercos", "gran velocidad de ataque")
+mago_electrico = MagoElectrico("Mago Electrico", "zap!")
+gigante_noble = GiganteNoble("Gigante Noble", "Lanza Cañonazo")
+
+# Diccionario para almacenar el estado de los personajes
+personajes = {
+    1: montapuercos,
+    2: mago_electrico,
+    3: gigante_noble
+}
+
+# Ciclo para elegir personajes y ejecutar sus ataques
+while True:
+    os.system("cls" if os.name == "nt" else "clear")  # Usa "clear" en Linux/Mac, "cls" en Windows
+    print("\nElige un personaje para que realice su ataque:")
+    for key, personaje in personajes.items():
+        print(f"{key}. {personaje.nombre}")
+
+    opcion = input("Ingresa el número del personaje que deseas elegir: ")
+
+    if opcion.isdigit() and int(opcion) in personajes:
+        personaje_elegido = personajes[int(opcion)]
+        personaje_elegido.presentarse()
+        personaje_elegido.atacar()
+
+        # Menú para elegir un personaje para heredar atributos
+        print("\nSelecciona otro personaje del que quieras heredar atributos:")
+        for key, personaje in personajes.items():
+            if personaje is not personaje_elegido:
+                print(f"{key}. {personaje.nombre}")
+
+        opcion_heredar = input("Ingresa el número del personaje del que quieres heredar atributos: ")
+
+        if opcion_heredar.isdigit() and int(opcion_heredar) in personajes:
+            personaje_a_heredar = personajes[int(opcion_heredar)]
+            # Heredar atributos y obtener los nuevos atributos
+            atributos_heredados = personaje_elegido.heredar_atributos(personaje_a_heredar)
+
+            # Mensaje de confirmación de atributos heredados
+            if atributos_heredados:
+                print(f"\nEstás heredando de {personaje_a_heredar.nombre} los siguientes atributos:")
+                for atributo in atributos_heredados:
+                    print(f"- {atributo}")
+
+        else:
+            print("Opción inválida. No se heredaron atributos.")
+
+    else:
+        print("Opción inválida. Por favor, elige un número de la lista.")
+
+    continuar = input("¿Quieres elegir otro personaje? Ingresa 1 para SÍ o cualquier otra tecla para NO: ")
+    if continuar != '1':
+        print("¡Gracias por jugar!")
+        break
